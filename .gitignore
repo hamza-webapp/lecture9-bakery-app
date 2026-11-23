@@ -1,0 +1,6 @@
+*.db
+*.db-*
+existing_orders.csv
+InstagramOrders_*.html
+__pycache__/
+*.py[cod]

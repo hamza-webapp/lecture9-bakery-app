@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Home Bakery Order Tracker — README</title>
+  <style>
+    :root { color-scheme: light; --ink:#253346; --muted:#667789; --line:#e2e7eb; --navy:#243d58; --teal:#23877c; --bg:#f4f6f8; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:var(--ink); font:16px/1.65 "Segoe UI",Arial,sans-serif; }
+    header { background:var(--navy); color:#fff; padding:34px 22px; }
+    header div, main { max-width:850px; margin:0 auto; }
+    header h1 { margin:0; font-size:30px; }
+    header p { margin:8px 0 0; color:#dce5eb; }
+    main { padding:24px 18px 48px; }
+    section { background:#fff; border:1px solid var(--line); border-radius:15px; padding:21px 24px; margin:0 0 16px; }
+    h2 { margin:0 0 10px; font-size:19px; }
+    p { margin:8px 0; }
+    ul, ol { padding-left:23px; margin:8px 0; }
+    li { margin:5px 0; }
+    code { background:#eff3f6; border-radius:5px; padding:2px 6px; color:#174a68; }
+    .callout { border-left:4px solid var(--teal); padding:10px 14px; background:#eef7f4; border-radius:7px; }
+    .muted { color:var(--muted); }
+  </style>
+</head>
+<body>
+  <header><div><h1>Home Bakery Order Tracker</h1><p>What the app does, how it handles the bakery rules, and how to start it.</p></div></header>
+  <main>
+    <section>
+      <h2>Start the app</h2>
+      <ol>
+        <li>Open this folder in File Explorer.</li>
+        <li>Click the folder address bar, type <code>powershell</code>, and press Enter.</li>
+        <li>In the window that opens, type <code>python app.py</code> and press Enter.</li>
+        <li>Open <a href="http://127.0.0.1:8000">http://127.0.0.1:8000</a> in your browser.</li>
+      </ol>
+      <p>Keep the black command window open while you use the app. To stop it, click that window and press <code>Ctrl+C</code>.</p>
+      <p class="callout">If port 8000 is already in use, start with <code>python app.py 8001</code> and open <code>http://127.0.0.1:8001</code>.</p>
+    </section>
+
+    <section>
+      <h2>What is included</h2>
+      <ul>
+        <li>On first start, the app imports <code>existing_orders.csv</code> and <code>InstagramOrders_Monday.html</code> through <code>InstagramOrders_Sunday.html</code> if you place your own files beside <code>app.py</code>. This public copy does not include customer data.</li>
+        <li>Every new order, change, and cancellation appears in the inbox for the baker to accept or decline.</li>
+        <li>Accepted orders, pickup dates, product values, oven time, helper bookings, and recent decisions appear on the same page.</li>
+        <li>You can add later Instagram DMs by entering them in “Record a new order request”. Use “Manage” on an accepted order to record a change or cancellation request.</li>
+      </ul>
+      <p>Order information stays on this computer in <code>bakery.db</code>. The database is created locally and is excluded from GitHub.</p>
+    </section>
+
+    <section>
+      <h2>Order states and actions</h2>
+      <pre>New message → Pending
+  Accept (when notice and oven rules pass) → Accepted order
+  Decline → Declined request
+
+Accepted order → Change request → Pending
+  Approve → Updated accepted order
+  Decline → Original order stays accepted
+
+Accepted order → Cancellation request → Pending
+  Approve → Cancelled order
+  Decline → Original order stays accepted
+
+Accepted order → On pickup day or later, mark picked up → Picked up
+
+Helper available → Book at least 2 days ahead → Adds 4 oven hours for $100
+  Remove booking only when accepted orders still fit the 8-hour limit</pre>
+      <p>Every request decision is recorded in the recent activity list. A request that breaks a rule stays pending until the baker declines it or fixes the schedule first.</p>
+    </section>
+
+    <section>
+      <h2>Information the app stores</h2>
+      <ul>
+        <li>Orders: reference, customer, product, quantity, pickup date, status, source, and note.</li>
+        <li>Requests: received day and time, customer, original message, request type, linked order, requested item, pickup date, and decision status.</li>
+        <li>Helper bookings: pickup day, booking day, and active or removed status.</li>
+        <li>Activity: date and time plus a short record of each decision.</li>
+      </ul>
+    </section>
+
+    <section>
+      <h2>How the bakery rules are applied</h2>
+      <ul>
+        <li>One order contains one product: cupcakes or cake.</li>
+        <li>Cupcakes cost $40 per dozen and take 30 minutes per dozen in the oven. Cake costs $120 each and takes 2 hours.</li>
+        <li>Accepted orders are counted against an 8-hour oven limit on their pickup day. The schedule shows the oven time used.</li>
+        <li>A helper costs $100 for one pickup day and adds 4 hours. Book a helper at least 2 days ahead; the schedule then shows the higher 12-hour limit.</li>
+        <li>Orders, changes, cancellations and helper bookings need at least 2 days’ notice. The app flags a request that is too late, past its pickup date, over capacity, or waiting on an earlier order decision.</li>
+        <li>For an order change, the app checks the revised oven load. If a cancellation is declined, the original accepted order stays on the schedule.</li>
+        <li>Pickup time is shown as 5:00 PM. Baking time is planned on the pickup date.</li>
+      </ul>
+      <p class="muted">The app checks these fixed rules and shows the baker the result. It does not accept, reject, or alter an order on its own.</p>
+    </section>
+
+    <section>
+      <h2>Built to stay simple</h2>
+      <p>The app uses one Python file, <code>app.py</code>, and Python’s built-in libraries only. It does not use Node.js, npm, or AI. The local server listens on this computer at <code>127.0.0.1</code>; it does not upload bakery data to a website.</p>
+    </section>
+  </main>
+</body>
+</html>
+
+
